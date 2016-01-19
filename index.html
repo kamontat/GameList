@@ -10,10 +10,17 @@
 <p id="gameMessage">
     Number of guesses: 0
 </p>
+<p>
+    <button id="reset">reset!</button>
+</p>
 <script src="jquery.js"></script>
 <script type="text/javascript">
     var c = 0;
     var answer = Math.ceil(Math.random() * 10);
+    function random() {
+        c = 0;
+        answer = Math.ceil(Math.random() * 10);
+    }
     
     function update() {
         var guess = $("#Guess").val(); // take value from "Guess"
@@ -35,6 +42,10 @@
     
     $("#Button").click(function(){
         update();
+    });
+    $("#reset").click(function() {
+        random();
+        $("#gameMessage").text("Number of guesses: " + c);
     });
 </script>
 </body>
