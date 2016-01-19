@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en">
 <body>
-<span id="counterLabel">0</span><br>
+<span id="counterLabel">Counter = 0</span><br>
 <button id="counterButton">Click me!</button>
 <script src="jquery.js"></script>
 <script type="text/javascript">
     var c = 0;
     function update() {
         c++;
-        $("#counterLabel").text('Counter = ' + c);    // *****
+        $("#counterLabel").text('Counter = ' + c); //update counter when call this function
     }
     $(function(){
-        $("#counterButton").click(update);
+        $("#counterButton").click(update); // call update function when user click button
     });
 </script>
 </body>
