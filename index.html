@@ -1,38 +1,40 @@
 <!doctype html>
 <html lang="en">
 <body>
-<input id="initValue">
-<button id="initButton">Click me!</button>
+<p>
+    Guess the number!
+</p>
+<p>
+    <input id="Guess"> <button id="Button">Guess</button>
+</p>
+<p id="gameMessage">
+    Number of guesses: 0
+</p>
 <script src="jquery.js"></script>
 <script type="text/javascript">
-        
-        var c = 0;
-        var answer = Math.ceil(Math.random() * 10);
+    var c = 0;
+    var answer = Math.ceil(Math.random() * 10);
     
     function update() {
-        var guess = $("#initValue").val(); // take value from "initValue"
-        var text = checkAnswer(answer, guess); // check the  answer and return message than we want to show out
+        var guess = $("#Guess").val(); // take value from "Guess"
         c++;
-        alert('Counter: ' + c + ", " + text); // update counter when call this function and show on alert box
+        $("#gameMessage").text("Number of guesses: " + c);
+        alert(guess + " is " + checkAnswer(answer, guess)); // check the  answer and return message than we want to show out
     }
-    function giveHint(message) {
-        return message;
-    }
+    
     function checkAnswer(a, g) {
-        var text = "";
-        if (a == g) {
-            text = giveHint('Great!  You guessed correctly.'); // when guess equals answer that program ramdom
-        } else if (a > g) {
-            text = giveHint("Too Low"); // if guess less than answer
+        if (a > g) {
+           return "Too Low"; // if guess less than answer
         } else if (a < g) {
-            text = giveHint("Too High"); // if guess more than answer
+            return "Too High"; // if guess more than answer
+        } else {
+             $("#gameMessage").text("you use " + c + " time(s) to guess " + a);
+            return 'Great!  You guessed correctly.'; // when guess equals answer that program ramdom
         }
-        return text;
     }
-    $(function(){
-        $("#initButton").click(function(){
-            update();
-        });
+    
+    $("#Button").click(function(){
+        update();
     });
 </script>
 </body>
