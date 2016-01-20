@@ -2,16 +2,30 @@
 <html lang="en">
 <body>
 <h1>Get the last one to win!</h1>
-    Number of sticks: 21<br>
-    <input id="idfield"><button id="pickButton">Pick</button>
-    
+    Number of sticks: <span id="numSticks">21</span><br>
+<input id="pickNum"><button id="pickButton">Pick</button>
     
 <script src="jquery.js"></script>
 <script type="text/javascript">
     
+    var numSticks = 21;
     
+    function pickSticks() {
+        var pick = $("#pickNum").val();
+        if (pick <= 3) {
+            if (pick <= numSticks) {
+                numSticks -= pick;
+                $("#numSticks").text(numSticks);
+            } else {
+                alert("can't enter number more than current number (" + numSticks + ")");
+            }
+        } else {
+            alert("can't enter number more than 3");
+        }
+    }
+    $(function() {
+        $("#pickButton").click(pickSticks);    
+    });
 </script>
-    
-    
 </body>
 </html>
