@@ -9,7 +9,7 @@
 <ul id="gameTranscript"></ul>
 <script src="jquery.js"></script>
 <script type="text/javascript">
-    
+    var check = 0;
     var gameSticks = {
         remainingSticks: 21,
         remove: function(n) {
@@ -30,8 +30,17 @@
             }
         }
     };
+    
     function autoPick() {
-        return parseInt(Math.ceil(Math.random() * 3));
+        if (gameSticks.remainingSticks == 4) {
+            return 3;
+        } else if (gameSticks.remainingSticks == 3) {
+            return 2;
+        } else if (gameSticks.remainingSticks == 2) {
+            return 1;
+        } else {
+            return parseInt(Math.ceil(Math.random() * 3));
+        }
     }
     
     function addToTranscript(msg) {
@@ -44,38 +53,45 @@
     
     function winner(user) {
         addToTranscript("!!!" + user + "  WINNER!!!");
+        if (user == "YOU") {
+            check = 1;
+        } else {
+            check = -1;
+        }
     }
     
     function pickSticks() {
-        var check = true;
         var pick = $("#pickNum").val();
-        var computerNum = autoPick();
-        if (pick <= 3 && computerNum <= 3) {
-            if (pick <= gameSticks.remainingSticks) {
-                gameSticks.remove(pick);
-                addToTranscript( "You pick " + pick);
-            }
-            if (check) {
-                gameSticks.checkWin("YOU", "COMPUTER");
-                check = false;
-            }
-            
-            if (computerNum < gameSticks.remainingSticks) {
-                gameSticks.remove(computerNum);
-                addToTranscript("Computer picks " + computerNum);
-            }
-            if (check) {
-                gameSticks.checkWin("COMPUTER", "YOU");
-                check = false;
-            }
+        if (check == 1) {
+            winner("YOU");
+        } else if (check == -1) {
+            winner("COMPUTER");
         } else {
-            alert("can't enter number more than 3");
+            if (pick <= 3) {
+
+                if (pick <= gameSticks.remainingSticks) {
+                    gameSticks.remove(pick);
+                    addToTranscript( "You pick " + pick);
+                }
+                gameSticks.checkWin("YOU", "COMPUTER");
+                if (check == 0) {
+                    var computerNum = autoPick();
+                    if (computerNum <= gameSticks.remainingSticks) {
+                        gameSticks.remove(computerNum);
+                        addToTranscript("Computer picks " + computerNum);
+                    }
+                    gameSticks.checkWin("COMPUTER", "YOU");
+                }
+            } else {
+                alert("can't enter number more than 3");
+            }
         }
     }
     function resetGame() {
         gameSticks.remainingSticks = 21
         $("#gameTranscript").text("");
         $("#numSticks").text("| | | | | | | | | | | | | | | | | | | | | (21)");
+        check = 0;
     }
     $(function() {
         $("#pickButton").click(pickSticks);
