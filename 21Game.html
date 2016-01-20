@@ -2,7 +2,7 @@
 <html lang="en">
 <body>
 <h1>Get the last one to win!</h1>
-    Number of sticks: <span id="numSticks">21</span><br>
+<span id="numSticks">| | | | | | | | | | | | | | | | | | | | | (21)</span><br>
 <input id="pickNum"><button id="pickButton">Pick</button>
 
 <ul id="gameTranscript"></ul>
@@ -12,8 +12,13 @@
     var gameSticks = {
         remainingSticks: 21,
         remove: function( n ) {
+            var sticks = "";
             this.remainingSticks -= n;
-            $("#numSticks").text(this.remainingSticks);
+            for (var i = 0; i < this.remainingSticks; i++) {
+                sticks += "| ";
+            }
+            sticks += "(" + this.remainingSticks + ")";
+            $("#numSticks").text(sticks);
         }
     };
     function autoPick() {
@@ -28,6 +33,10 @@
         alert(user + " can't enter number more than current number (" + gameSticks.remainingSticks + ")");
     }
     
+    function winner(user) {
+        alert("!!!" + user + "  WINNER!!!");
+    }
+    
     function pickSticks() {
         var pick = $("#pickNum").val();
         var computerNum = autoPick();
@@ -35,11 +44,11 @@
             if (pick <= gameSticks.remainingSticks) {
                 gameSticks.remove(pick);
                 addToTranscript( "You pick " + pick);
-                if (computerNum <= gameSticks.remainingSticks) {
+                if (computerNum < gameSticks.remainingSticks) {
                     gameSticks.remove(computerNum);
                     addToTranscript("Computer picks " + computerNum);
                 } else {
-                    errorInput("computer");
+                    winner("YOU");
                 }
             } else {
                 errorInput("you");
