@@ -4,18 +4,37 @@
 <h1>Get the last one to win!</h1>
     Number of sticks: <span id="numSticks">21</span><br>
 <input id="pickNum"><button id="pickButton">Pick</button>
-    
+
+<ul id="gameTranscript"></ul>
 <script src="jquery.js"></script>
 <script type="text/javascript">
     
     var numSticks = 21;
     
+    function autoPick() {
+        return parseInt(Math.ceil(Math.random() * 3));
+    }
+    
+    function addToTranscript(msg) {
+        $("#gameTranscript").append("<li>" + msg + "</li>");
+    }
+    
     function pickSticks() {
         var pick = $("#pickNum").val();
-        if (pick <= 3) {
+        var computerNum = autoPick();
+        if (pick <= 3 && computerNum <= 3) {
             if (pick <= numSticks) {
                 numSticks -= pick;
                 $("#numSticks").text(numSticks);
+                addToTranscript( "You pick " + pick);
+            } else {
+                alert("can't enter number more than current number (" + numSticks + ")");
+            }
+            
+            if (computerNum <= numSticks) {
+                numSticks -= computerNum;
+                $("#numSticks").text(numSticks);
+                addToTranscript("Computer picks " + computerNum);
             } else {
                 alert("can't enter number more than current number (" + numSticks + ")");
             }
@@ -24,7 +43,7 @@
         }
     }
     $(function() {
-        $("#pickButton").click(pickSticks);    
+        $("#pickButton").click(pickSticks);
     });
 </script>
 </body>
