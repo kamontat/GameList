@@ -12,6 +12,7 @@
     var check = 0;
     var gameSticks = {
         remainingSticks: 21,
+        // To remove the number
         remove: function(n) {
             var sticks = "";
             this.remainingSticks -= n;
@@ -21,6 +22,7 @@
             sticks += "(" + this.remainingSticks + ")";
             $("#numSticks").text(sticks);
         },
+        // To check player who have win
         checkWin: function(user, opposite) {
             if (this.remainingSticks == 1) {
                 winner(user);
@@ -30,7 +32,7 @@
             }
         }
     };
-    
+    // To random or calculate the computer number
     function autoPick() {
         if (gameSticks.remainingSticks == 4) {
             return 3;
@@ -42,15 +44,15 @@
             return parseInt(Math.ceil(Math.random() * 3));
         }
     }
-    
+    // Update Transcript message
     function addToTranscript(msg) {
         $("#gameTranscript").append("<li>" + msg + "</li>");
     }
-    
+    // Alert the error message
     function errorInput(user) {
         alert(user + " can't enter number more than current number (" + gameSticks.remainingSticks + ")");
     }
-    
+    // Tell player who got win
     function winner(user) {
         addToTranscript("!!!" + user + "  WINNER!!!");
         if (user == "YOU") {
@@ -59,16 +61,19 @@
             check = -1;
         }
     }
-    
+    // Update everything
     function pickSticks() {
         var pick = $("#pickNum").val();
+        // check player who got win
         if (check == 1) {
             winner("YOU");
         } else if (check == -1) {
             winner("COMPUTER");
+        // else non player got win now
         } else {
+            // number can't more than 3
             if (pick <= 3) {
-
+                // number can't more than the stick left
                 if (pick <= gameSticks.remainingSticks) {
                     gameSticks.remove(pick);
                     addToTranscript( "You pick " + pick);
@@ -87,12 +92,14 @@
             }
         }
     }
+    // To reset the game and play again by use button, not refresh page
     function resetGame() {
         gameSticks.remainingSticks = 21
         $("#gameTranscript").text("");
         $("#numSticks").text("| | | | | | | | | | | | | | | | | | | | | (21)");
         check = 0;
     }
+    
     $(function() {
         $("#pickButton").click(pickSticks);
         $("#resetButton").click(resetGame);
