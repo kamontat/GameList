@@ -9,8 +9,13 @@
 <script src="jquery.js"></script>
 <script type="text/javascript">
     
-    var numSticks = 21;
-    
+    var gameSticks = {
+        remainingSticks: 21,
+        remove: function( n ) {
+            this.remainingSticks -= n;
+            $("#numSticks").text(this.remainingSticks);
+        }
+    };
     function autoPick() {
         return parseInt(Math.ceil(Math.random() * 3));
     }
@@ -19,24 +24,25 @@
         $("#gameTranscript").append("<li>" + msg + "</li>");
     }
     
+    function errorInput(user) {
+        alert(user + " can't enter number more than current number (" + gameSticks.remainingSticks + ")");
+    }
+    
     function pickSticks() {
         var pick = $("#pickNum").val();
         var computerNum = autoPick();
         if (pick <= 3 && computerNum <= 3) {
-            if (pick <= numSticks) {
-                numSticks -= pick;
-                $("#numSticks").text(numSticks);
+            if (pick <= gameSticks.remainingSticks) {
+                gameSticks.remove(pick);
                 addToTranscript( "You pick " + pick);
+                if (computerNum <= gameSticks.remainingSticks) {
+                    gameSticks.remove(computerNum);
+                    addToTranscript("Computer picks " + computerNum);
+                } else {
+                    errorInput("computer");
+                }
             } else {
-                alert("can't enter number more than current number (" + numSticks + ")");
-            }
-            
-            if (computerNum <= numSticks) {
-                numSticks -= computerNum;
-                $("#numSticks").text(numSticks);
-                addToTranscript("Computer picks " + computerNum);
-            } else {
-                alert("can't enter number more than current number (" + numSticks + ")");
+                errorInput("you");
             }
         } else {
             alert("can't enter number more than 3");
