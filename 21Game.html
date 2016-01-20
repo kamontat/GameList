@@ -4,6 +4,7 @@
 <h1>Get the last one to win!</h1>
 <span id="numSticks">| | | | | | | | | | | | | | | | | | | | | (21)</span><br>
 <input id="pickNum"><button id="pickButton">Pick</button>
+<button id="resetButton">Reset!</button>
 
 <ul id="gameTranscript"></ul>
 <script src="jquery.js"></script>
@@ -57,8 +58,14 @@
             alert("can't enter number more than 3");
         }
     }
+    function resetGame() {
+        gameSticks.remainingSticks = 21
+        $("#gameTranscript").text("");
+        $("#numSticks").text("| | | | | | | | | | | | | | | | | | | | | (21)");
+    }
     $(function() {
         $("#pickButton").click(pickSticks);
+        $("#resetButton").click(resetGame);
     });
 </script>
 </body>
