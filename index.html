@@ -1,52 +1,57 @@
 <!doctype html>
 <html lang="en">
+
 <body>
-<p>
-    Guess the number!
-</p>
-<p>
-    <input id="Guess"> <button id="Button">Guess</button>
-</p>
-<p id="gameMessage">
-    Number of guesses: 0
-</p>
-<p>
-    <button id="reset">reset!</button>
-</p>
-<script src="jquery.js"></script>
-<script type="text/javascript">
-    var c = 0;
-    var answer = Math.ceil(Math.random() * 10);
-    function random() {
-        c = 0;
-        answer = Math.ceil(Math.random() * 10);
-    }
-    
-    function update() {
-        var guess = $("#Guess").val(); // take value from "Guess"
-        c++;
-        $("#gameMessage").text("Number of guesses: " + c);
-        alert(guess + " is " + checkAnswer(answer, guess)); // check the  answer and return message than we want to show out
-    }
-    
-    function checkAnswer(a, g) {
-        if (a > g) {
-           return "Too Low"; // if guess less than answer
-        } else if (a < g) {
-            return "Too High"; // if guess more than answer
-        } else {
-             $("#gameMessage").text("you use " + c + " time(s) to guess " + a);
-            return 'Great!  You guessed correctly.'; // when guess equals answer that program ramdom
+    <p>
+        Guess the number!
+    </p>
+    <p>
+        <input id="Guess">
+        <button id="Button">Guess</button>
+    </p>
+    <p id="gameMessage">
+        Number of guesses: 0
+    </p>
+    <p>
+        <button id="reset">reset!</button>
+    </p>
+    <script src="jquery.js"></script>
+    <script type="text/javascript">
+        var c = 0;
+        var answer = Math.ceil(Math.random() * 10);
+
+        function random() {
+            c = 0;
+            answer = Math.ceil(Math.random() * 10);
         }
-    }
-    
-    $("#Button").click(function(){
-        update();
-    });
-    $("#reset").click(function() {
-        random();
-        $("#gameMessage").text("Number of guesses: " + c);
-    });
-</script>
+
+        function update() {
+            var guess = $("#Guess").val(); // take value from "Guess"
+            c++;
+            $("#gameMessage").text("Number of guesses: " + c);
+            alert(guess + " is " + checkAnswer(answer, guess)); // check the  answer and return message than we want to show out
+        }
+
+        function checkAnswer(a, g) {
+            if (a > g) {
+                return "Too Low"; // if guess less than answer
+            } else if (a < g) {
+                return "Too High"; // if guess more than answer
+            } else {
+                $("#gameMessage").text("you use " + c + " time(s) to guess " + a);
+                return 'Great!  You guessed correctly.'; // when guess equals answer that program ramdom
+            }
+        }
+
+        $("#Button").click(function() {
+            update();
+        });
+        $("#reset").click(function() {
+            random();
+            $("#gameMessage").text("Number of guesses: " + c);
+        });
+
+    </script>
 </body>
+
 </html>

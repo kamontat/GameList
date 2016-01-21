@@ -1,109 +1,114 @@
 <!doctype html>
 <html lang="en">
-<body>
-<h1>Get the last one to win!</h1>
-<span id="numSticks">| | | | | | | | | | | | | | | | | | | | | | | | (24)</span><br>
-<input id="pickNum"><button id="pickButton">Pick</button>
-<button id="resetButton">Reset!</button>
 
-<ul id="gameTranscript"></ul>
-<script src="jquery.js"></script>
-<script type="text/javascript">
-    var check = 0;
-    var gameSticks = {
-        remainingSticks: 24,
-        // To remove the number
-        remove: function(n) {
-            var sticks = "";
-            this.remainingSticks -= n;
-            for (var i = 0; i < this.remainingSticks; i++) {
-                sticks += "| ";
-            }
-            sticks += "(" + this.remainingSticks + ")";
-            $("#numSticks").text(sticks);
-        },
-        // To check player who have win
-        checkWin: function(user, opposite) {
-            if (this.remainingSticks == 1) {
-                winner(user);
-            }
-            if (this.remainingSticks < 1) {
-                winner(opposite);
-            }
-        }
-    };
-    // To random or calculate the computer number
-    function autoPick() {
-        if (gameSticks.remainingSticks == 4) {
-            return 3;
-        } else if (gameSticks.remainingSticks == 3) {
-            return 2;
-        } else if (gameSticks.remainingSticks == 2) {
-            return 1;
-        } else {
-            return parseInt(Math.ceil(Math.random() * 3));
-        }
-    }
-    // Update Transcript message
-    function addToTranscript(msg) {
-        $("#gameTranscript").append("<li>" + msg + "</li>");
-    }
-    // Alert the error message
-    function errorInput(user) {
-        alert(user + " can't enter number more than current number (" + gameSticks.remainingSticks + ")");
-    }
-    // Tell player who got win
-    function winner(user) {
-        addToTranscript("!!!" + user + "  WINNER!!!");
-        if (user == "YOU") {
-            check = 1;
-        } else {
-            check = -1;
-        }
-    }
-    // Update everything
-    function pickSticks() {
-        var pick = $("#pickNum").val();
-        // check player who got win
-        if (check == 1) {
-            winner("YOU");
-        } else if (check == -1) {
-            winner("COMPUTER");
-        // else non player got win now
-        } else {
-            // number can't more than 3
-            if (pick <= 3) {
-                // number can't more than the stick left
-                if (pick <= gameSticks.remainingSticks) {
-                    gameSticks.remove(pick);
-                    addToTranscript( "You pick " + pick);
+<body>
+    <h1>Get the last one to win!</h1>
+    <span id="numSticks">| | | | | | | | | | | | | | | | | | | | | | | | (24)</span>
+    <br>
+    <input id="pickNum">
+    <button id="pickButton">Pick</button>
+    <button id="resetButton">Reset!</button>
+
+    <ul id="gameTranscript"></ul>
+    <script src="jquery.js"></script>
+    <script type="text/javascript">
+        var check = 0;
+        var gameSticks = {
+            remainingSticks: 24,
+            // To remove the number
+            remove: function(n) {
+                var sticks = "";
+                this.remainingSticks -= n;
+                for (var i = 0; i < this.remainingSticks; i++) {
+                    sticks += "| ";
                 }
-                gameSticks.checkWin("YOU", "COMPUTER");
-                if (check == 0) {
-                    var computerNum = autoPick();
-                    if (computerNum <= gameSticks.remainingSticks) {
-                        gameSticks.remove(computerNum);
-                        addToTranscript("Computer picks " + computerNum);
-                    }
-                    gameSticks.checkWin("COMPUTER", "YOU");
+                sticks += "(" + this.remainingSticks + ")";
+                $("#numSticks").text(sticks);
+            },
+            // To check player who have win
+            checkWin: function(user, opposite) {
+                if (this.remainingSticks == 1) {
+                    winner(user);
                 }
+                if (this.remainingSticks < 1) {
+                    winner(opposite);
+                }
+            }
+        };
+        // To random or calculate the computer number
+        function autoPick() {
+            if (gameSticks.remainingSticks == 4) {
+                return 3;
+            } else if (gameSticks.remainingSticks == 3) {
+                return 2;
+            } else if (gameSticks.remainingSticks == 2) {
+                return 1;
             } else {
-                alert("can't enter number more than 3");
+                return parseInt(Math.ceil(Math.random() * 3));
             }
         }
-    }
-    // To reset the game and play again by use button, not refresh page
-    function resetGame() {
-        gameSticks.remainingSticks = 21
-        $("#gameTranscript").text("");
-        $("#numSticks").text("| | | | | | | | | | | | | | | | | | | | | (21)");
-        check = 0;
-    }
-    
-    $(function() {
-        $("#pickButton").click(pickSticks);
-        $("#resetButton").click(resetGame);
-    });
-</script>
+        // Update Transcript message
+        function addToTranscript(msg) {
+            $("#gameTranscript").append("<li>" + msg + "</li>");
+        }
+        // Alert the error message
+        function errorInput(user) {
+            alert(user + " can't enter number more than current number (" + gameSticks.remainingSticks + ")");
+        }
+        // Tell player who got win
+        function winner(user) {
+            addToTranscript("!!!" + user + "  WINNER!!!");
+            if (user == "YOU") {
+                check = 1;
+            } else {
+                check = -1;
+            }
+        }
+        // Update everything
+        function pickSticks() {
+            var pick = $("#pickNum").val();
+            // check player who got win
+            if (check == 1) {
+                winner("YOU");
+            } else if (check == -1) {
+                winner("COMPUTER");
+                // else non player got win now
+            } else {
+                // number can't more than 3
+                if (pick <= 3) {
+                    // number can't more than the stick left
+                    if (pick <= gameSticks.remainingSticks) {
+                        gameSticks.remove(pick);
+                        addToTranscript("You pick " + pick);
+                    }
+                    gameSticks.checkWin("YOU", "COMPUTER");
+                    if (check == 0) {
+                        var computerNum = autoPick();
+                        if (computerNum <= gameSticks.remainingSticks) {
+                            gameSticks.remove(computerNum);
+                            addToTranscript("Computer picks " + computerNum);
+                        }
+                        gameSticks.checkWin("COMPUTER", "YOU");
+                    }
+                } else {
+                    alert("can't enter number more than 3");
+                }
+            }
+        }
+        // To reset the game and play again by use button, not refresh page
+        function resetGame() {
+            gameSticks.remainingSticks = 21
+            $("#gameTranscript").text("");
+            $("#numSticks").text("| | | | | | | | | | | | | | | | | | | | | (21)");
+            check = 0;
+        }
+
+        $(function() {
+            $("#pickButton").click(pickSticks);
+            $("#resetButton").click(resetGame);
+        });
+
+    </script>
 </body>
+
 </html>
