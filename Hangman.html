@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<body>
+
+<ul id="gameTranscript"></ul>
+<script src="jquery.js"></script>
+<script type="text/javascript">
+    // constructor
+    function HangmanWord(word) {
+        this.word = word;
+        this.getHint = getHint(word);
+    }
+    function getHint(word) {
+        var text = "";
+        for (var i = 0; i < word.length; i++) {
+            text += "_";
+        }
+        return text;
+    }
+    var hangman = new HangmanWord( 'ELEPHANT' );       // how a new object is created.
+    
+    
+    
+    
+    // Sample interaction in the JavaScript console
+      hangman.getHint()                  // --> "_ _ _ _ _ _ _ _"
+      hangman.check( 'Z' )               // --> false
+      hangman.check( 'A' )               // --> true
+      hangman.getHint()                  // --> "_ _ _ _ _ _ _ _"
+      hangman.add( 'A' );
+      hangman.getHint()                  // --> "_ _ _ _ _ A _ _"
+      hangman.check( 'E' )               // --> true
+      hangman.add( 'E' );
+      hangman.getHint()                  // --> "E _ E _ _ A _ _"
+    
+</script>
+</body>
+</html>
