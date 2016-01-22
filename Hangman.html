@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Hangman (V:1.0.00)</title>
+    <title>Hangman (V:1.1.00)</title>
 </head>
 
 <body>
@@ -14,7 +14,8 @@
         <span>your guess: </span>
         <input id="alphabel">
         <button id="guessButton">Guess!</button>
-        <br>
+    </p>
+    <p>
         <span id="wrongGuess">0</span> Wrong guesses.
     </p>
     <ul id="listGuess"></ul>
@@ -22,6 +23,8 @@
 
     <script src="jquery.js"></script>
     <script type="text/javascript">
+        "use strict";
+
         // constructor
         function HangmanWord(word) {
             this.word = word;
@@ -60,21 +63,28 @@
         }
 
         function guessAlphabel() {
-            var alphabel = $("#alphabel").val();
-            if (alphabel == "") {
-                alert("Alert Unknown");
+            if ($("#alphabel").val().length > 1) {
+                alert("Please, input only 1 Char");
             } else {
-                if (hangman.check(alphabel)) {
-                    hangman.add(alphabel);
+                var alphabel = $("#alphabel").val();
+                // To non-sensitive case
+                alphabel = alphabel.toLocaleUpperCase();
+                if (alphabel == "") {
+                    alert("Please, Enter One Char");
                 } else {
-                    var num = parseInt($("#wrongGuess").text());
-                    $("#wrongGuess").text(++num);
+                    if (hangman.check(alphabel)) {
+                        hangman.add(alphabel);
+                    } else {
+                        var num = parseInt($("#wrongGuess").text());
+                        $("#wrongGuess").text(++num);
+                    }
                 }
             }
         }
-
-
-        var hangman = new HangmanWord('ELEPHANT'); // how a new object is created.
+        // word list on this program
+        var wordList = ["ELEPHANT", "COMMIT", "BRANCH", "PROGRAMMING", "KAMONTAT", "IMAGES", "RANDOM", "ENCOURAGE"];
+        var random = parseInt(Math.random() * wordList.length);
+        var hangman = new HangmanWord(wordList[random]);
         hangman.getHint();
 
         $(function() {
