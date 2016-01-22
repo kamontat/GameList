@@ -2,12 +2,24 @@
 <html lang="en">
 
 <head>
-    <title>Hangman (V:0.1.00)</title>
+    <title>Hangman (V:1.0.00)</title>
 </head>
 
 <body>
+    <h1>
+        Hangman
+    </h1>
+    <span id="wordHint"></span>
+    <p>
+        <span>your guess: </span>
+        <input id="alphabel">
+        <button id="guessButton">Guess!</button>
+        <br>
+        <span id="wrongGuess">0</span> Wrong guesses.
+    </p>
+    <ul id="listGuess"></ul>
 
-    <ul id="gameTranscript"></ul>
+
     <script src="jquery.js"></script>
     <script type="text/javascript">
         // constructor
@@ -22,9 +34,9 @@
         HangmanWord.prototype.check = function(alphabet) {
             // can found
             if (this.word.indexOf(alphabet) != -1) {
-                console.log(true);
+                return true;
             } else {
-                console.log(false);
+                return false;
             }
         };
 
@@ -34,7 +46,7 @@
             for (var i = 0; i < this.word.length; i++) {
                 text += this.addWordList[i] + "  ";
             }
-            console.log(text);
+            $("#wordHint").text(text);
         }
         HangmanWord.prototype.add = function(alphabet) {
             var position = this.word.indexOf(alphabet);
@@ -47,19 +59,30 @@
             }
         }
 
+        function guessAlphabel() {
+            var alphabel = $("#alphabel").val();
+            if (alphabel == "") {
+                alert("Alert Unknown");
+            } else {
+                if (hangman.check(alphabel)) {
+                    hangman.add(alphabel);
+                } else {
+                    var num = parseInt($("#wrongGuess").text());
+                    $("#wrongGuess").text(++num);
+                }
+            }
+        }
+
 
         var hangman = new HangmanWord('ELEPHANT'); // how a new object is created.
+        hangman.getHint();
 
-        // Sample interaction in the JavaScript console
-        hangman.getHint() // --> "_ _ _ _ _ _ _ _"
-        hangman.check('Z'); // --> false
-        hangman.check('A'); // --> true
-        hangman.getHint() // --> "_ _ _ _ _ _ _ _"
-        hangman.add('A');
-        hangman.getHint() // --> "_ _ _ _ _ A _ _"
-        hangman.check('E') // --> true
-        hangman.add('E');
-        hangman.getHint() // --> "E _ E _ _ A _ _"
+        $(function() {
+            $("#guessButton").click(function() {
+                guessAlphabel();
+                hangman.getHint();
+            });
+        });
 
     </script>
 </body>
