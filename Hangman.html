@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Hangman (V:1.1.00)</title>
+    <title>Hangman (V:1.1.10)</title>
 </head>
 
 <body>
@@ -12,7 +12,7 @@
     <span id="wordHint"></span>
     <p>
         <span>your guess: </span>
-        <input id="alphabel">
+        <input id="alphabel" />
         <button id="guessButton">Guess!</button>
     </p>
     <p>
@@ -24,7 +24,6 @@
     <script src="jquery.js"></script>
     <script type="text/javascript">
         "use strict";
-
         // constructor
         function HangmanWord(word) {
             this.word = word;
@@ -61,6 +60,14 @@
                 }
             }
         }
+        HangmanWord.prototype.checkWin = function() {
+            if (this.addWordList.indexOf("_") == -1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
 
         function guessAlphabel() {
             if ($("#alphabel").val().length > 1) {
@@ -83,6 +90,7 @@
         }
         // word list on this program
         var wordList = ["ELEPHANT", "COMMIT", "BRANCH", "PROGRAMMING", "KAMONTAT", "IMAGES", "RANDOM", "ENCOURAGE"];
+
         var random = parseInt(Math.random() * wordList.length);
         var hangman = new HangmanWord(wordList[random]);
         hangman.getHint();
@@ -91,6 +99,9 @@
             $("#guessButton").click(function() {
                 guessAlphabel();
                 hangman.getHint();
+                if (hangman.checkWin()) {
+                    alert("YOU WIN!");
+                }
             });
         });
 
