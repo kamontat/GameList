@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Hangman (V:1.1.11)</title>
+    <title>Hangman (V:1.2.02)</title>
 </head>
 
 <body>
@@ -14,6 +14,7 @@
         <span>your guess: </span>
         <input id="alphabel" />
         <button id="guessButton">Guess!</button>
+        <button id="reset" style="visibility:hidden">NEW GAME!</button>
     </p>
     <p>
         <span id="wrongGuess">0</span> Wrong guesses.
@@ -28,6 +29,7 @@
         function HangmanWord(word) {
             this.word = word;
             this.addWordList = new Array(this.word.length);
+            this.wordAlreally = [];
             for (var i = 0; i < this.word.length; i++) {
                 this.addWordList[i] = "_";
             }
@@ -52,19 +54,17 @@
         }
         HangmanWord.prototype.add = function(alphabet) {
             var position = this.word.indexOf(alphabet);
-            if (position != -1) {
+            this.addWordList[position] = alphabet;
+            while (this.word.indexOf(alphabet, position + 1) != -1) {
+                position = this.word.indexOf(alphabet, position + 1);
                 this.addWordList[position] = alphabet;
-                while (this.word.indexOf(alphabet, position + 1) != -1) {
-                    position = this.word.indexOf(alphabet, position + 1);
-                    this.addWordList[position] = alphabet;
-                }
             }
         }
         HangmanWord.prototype.checkWin = function() {
             if (this.addWordList.indexOf("_") == -1) {
-                return true;
-            } else {
-                return false;
+                alert("YOU WIN! with " + $("#wrongGuess").text() + " wrong(s)");
+                document.getElementById("guessButton").disabled = true;
+                document.getElementById("reset").style.visibility = "visible";
             }
 
         }
@@ -82,27 +82,54 @@
                     if (hangman.check(alphabel)) {
                         hangman.add(alphabel);
                     } else {
+                        // add word alreally push 
+                        this.wordAlreally.push(alphabet);
+                        // update num wrong
                         var num = parseInt($("#wrongGuess").text());
                         $("#wrongGuess").text(++num);
                         $("#listGuess").append("<li>\"" + $("#alphabel").val() + "\"</li>");
                     }
                 }
             }
+            for (int i = 0; i < this.wordAlreally.length; i++) {
+                console.log(this.wordAlreally[i]);
+            }
         }
         // word list on this program
-        var wordList = ["ELEPHANT", "COMMIT", "BRANCH", "PROGRAMMING", "KAMONTAT", "IMAGES", "RANDOM", "ENCOURAGE"];
+        var wordList = ["A", "AB", "ABC"];
 
         var random = parseInt(Math.random() * wordList.length);
         var hangman = new HangmanWord(wordList[random]);
         hangman.getHint();
 
         $(function() {
+            $("#alphabel").on("keydown", function(event) {
+                if (event.keyCode == 13) {
+                    guessAlphabel();
+                    hangman.getHint();
+                    hangman.checkWin()
+                }
+            });
+
+
             $("#guessButton").click(function() {
                 guessAlphabel();
                 hangman.getHint();
-                if (hangman.checkWin()) {
-                    alert("YOU WIN!");
-                }
+                hangman.checkWin()
+            });
+
+            $("#reset").click(function() {
+                random = parseInt(Math.random() * wordList.length);
+                // radom word again
+                hangman = new HangmanWord(wordList[random]);
+                hangman.getHint();
+                // reset button
+                document.getElementById("guessButton").disabled = false;
+                document.getElementById("reset").style.visibility = "hidden";
+                // change wrong times
+                $("#wrongGuess").text(0);
+                // reset list of uncorrect alphabel
+                $("#listGuess").empty();
             });
         });
 
