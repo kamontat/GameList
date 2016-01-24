@@ -84,6 +84,7 @@
                     } else {
                         var num = parseInt($("#wrongGuess").text());
                         $("#wrongGuess").text(++num);
+                        $("#listGuess").append("<li>\"" + $("#alphabel").val() + "\"</li>");
                     }
                 }
             }
