@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Hangman (V:1.2.02)</title>
+    <title>Hangman (V:1.3.00)</title>
 </head>
 
 <body>
@@ -29,10 +29,11 @@
         function HangmanWord(word) {
             this.word = word;
             this.addWordList = new Array(this.word.length);
-            this.wordAlreally = [];
             for (var i = 0; i < this.word.length; i++) {
                 this.addWordList[i] = "_";
             }
+
+            this.wordAlreally = [];
         }
         // prototype mean every object in the class can use this method 
         HangmanWord.prototype.check = function(alphabet) {
@@ -42,6 +43,17 @@
             } else {
                 return false;
             }
+        };
+        /**
+        this method return "false" if the alphabel in parameter is can found on array, otherwise return "true"
+        */
+        HangmanWord.prototype.checkRepeatAlphabel = function(alphabel) {
+            for (var i = 0; i < this.wordAlreally.length; i++) {
+                if (this.wordAlreally[i] == alphabel) {
+                    return false;
+                }
+            }
+            return true;
         };
 
         HangmanWord.prototype.getHint = function() {
@@ -65,8 +77,8 @@
                 alert("YOU WIN! with " + $("#wrongGuess").text() + " wrong(s)");
                 document.getElementById("guessButton").disabled = true;
                 document.getElementById("reset").style.visibility = "visible";
+                check = false;
             }
-
         }
 
         function guessAlphabel() {
@@ -79,22 +91,27 @@
                 if (alphabel == "") {
                     alert("Please, Enter One Char");
                 } else {
-                    if (hangman.check(alphabel)) {
-                        hangman.add(alphabel);
+                    // check duplicate alphabel
+                    if (hangman.checkRepeatAlphabel(alphabel)) {
+                        // add word alreally push
+                        hangman.wordAlreally.push(alphabel);
+                        // check correction alphabel
+                        if (hangman.check(alphabel)) {
+                            hangman.add(alphabel);
+                        } else {
+                            // update num wrong
+                            var num = parseInt($("#wrongGuess").text());
+                            $("#wrongGuess").text(++num);
+                            $("#listGuess").append("<li>\"" + $("#alphabel").val() + "\"</li>");
+                        }
                     } else {
-                        // add word alreally push 
-                        this.wordAlreally.push(alphabet);
-                        // update num wrong
-                        var num = parseInt($("#wrongGuess").text());
-                        $("#wrongGuess").text(++num);
-                        $("#listGuess").append("<li>\"" + $("#alphabel").val() + "\"</li>");
+                        alert("Please, Don't Enter duplicate alphabel");
                     }
                 }
             }
-            for (int i = 0; i < this.wordAlreally.length; i++) {
-                console.log(this.wordAlreally[i]);
-            }
         }
+        // to disable enter function
+        var check = true;
         // word list on this program
         var wordList = ["A", "AB", "ABC"];
 
@@ -104,7 +121,7 @@
 
         $(function() {
             $("#alphabel").on("keydown", function(event) {
-                if (event.keyCode == 13) {
+                if (event.keyCode == 13 && check) {
                     guessAlphabel();
                     hangman.getHint();
                     hangman.checkWin()
@@ -130,6 +147,8 @@
                 $("#wrongGuess").text(0);
                 // reset list of uncorrect alphabel
                 $("#listGuess").empty();
+                // reset check 
+                check = true;
             });
         });
 
