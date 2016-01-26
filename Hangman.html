@@ -27,12 +27,12 @@ NEW FEATURE COMING ::
     </p>
     <ul id="listGuess"></ul>
 
-    <img src="picOfHangman/hangman1.png">
-    <img src="picOfHangman/hangman2.png">
-    <img src="picOfHangman/hangman3.png">
-    <img src="picOfHangman/hangman4.png">
-    <img src="picOfHangman/hangman5.png">
-    <img src="picOfHangman/hangman6.png">
+    <img id="hangman1" src="picOfHangman/hangman1.png">
+    <img id="hangman2" src="picOfHangman/hangman2.png">
+    <img id="hangman3" src="picOfHangman/hangman3.png">
+    <img id="hangman4" src="picOfHangman/hangman4.png">
+    <img id="hangman5" src="picOfHangman/hangman5.png">
+    <img id="hangman6" src="picOfHangman/hangman6.png">
 
 
     <script src="jquery.js"></script>
@@ -94,6 +94,15 @@ NEW FEATURE COMING ::
             }
         }
 
+        function hiddenPic() {
+            $("#hangman1").hide();
+            $("#hangman2").hide();
+            $("#hangman3").hide();
+            $("#hangman4").hide();
+            $("#hangman5").hide();
+            $("#hangman6").hide();
+        }
+
         function guessAlphabel() {
             if ($("#alphabel").val().length > 1) {
                 alert("Please, input only 1 Char");
@@ -123,6 +132,8 @@ NEW FEATURE COMING ::
                 }
             }
         }
+        hiddenPic();
+
         // to disable enter function
         var check = true;
         // word list on this program
