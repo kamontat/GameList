@@ -1,21 +1,28 @@
 <!doctype html>
 <html lang="en">
 
-<!-- 
-NEW FEATURE COMING :: 
-1) HINT
-2) list alphabel 
--->
-
 <head>
-    <title>Hangman (V:1.3.21)</title>
+    <title>Hangman (V:1.4.12)</title>
 </head>
 
 <body>
     <h1>
         Hangman Game
     </h1>
+
     <span id="wordHint"></span>
+
+    <p>
+        <img id="hangman1" src="picOfHangman/hangman1.png">
+        <img id="hangman2" src="picOfHangman/hangman2.png">
+        <img id="hangman3" src="picOfHangman/hangman3.png">
+        <img id="hangman4" src="picOfHangman/hangman4.png">
+        <img id="hangman5" src="picOfHangman/hangman5.png">
+        <img id="hangman6" src="picOfHangman/hangman6.png">
+        <img id="hangman7" src="picOfHangman/hangman7.png">
+        <img id="hangman8" src="picOfHangman/hangman8.png">
+    </p>
+
     <p>
         <span>your guess: </span>
         <input id="alphabel" />
@@ -27,13 +34,7 @@ NEW FEATURE COMING ::
     </p>
     <ul id="listGuess"></ul>
 
-    <img id="hangman1" src="picOfHangman/hangman1.png">
-    <img id="hangman2" src="picOfHangman/hangman2.png">
-    <img id="hangman3" src="picOfHangman/hangman3.png">
-    <img id="hangman4" src="picOfHangman/hangman4.png">
-    <img id="hangman5" src="picOfHangman/hangman5.png">
-    <img id="hangman6" src="picOfHangman/hangman6.png">
-    <img id="hangman7" src="picOfHangman/hangman7.png">
+
 
 
     <script src="jquery.js"></script>
@@ -94,15 +95,29 @@ NEW FEATURE COMING ::
                 check = false;
             }
         }
+        HangmanWord.prototype.checklose = function(num) {
+            if (showPic(num)) {
+                alert("YOU Lose!");
+                document.getElementById("guessButton").disabled = true;
+                document.getElementById("reset").style.visibility = "visible";
+                check = false;
+
+                // answer the word
+                for (var i = 0; i < this.word.length; i++) {
+                    this.addWordList[i] = this.word.charAt(i);
+                }
+            }
+        }
 
         function hiddenPic() {
-            $("#hangman1").hide();
+            $("#hangman1").show();
             $("#hangman2").hide();
             $("#hangman3").hide();
             $("#hangman4").hide();
             $("#hangman5").hide();
             $("#hangman6").hide();
             $("#hangman7").hide();
+            $("#hangman8").hide();
         }
 
         /**
@@ -110,20 +125,34 @@ NEW FEATURE COMING ::
         */
         function showPic(num) {
             if (num == 1) {
+                $("#hangman1").hide();
+                $("#hangman2").show();
                 return false;
             } else if (num == 2) {
+                $("#hangman2").hide();
+                $("#hangman3").show();
                 return false;
             } else if (num == 3) {
+                $("#hangman3").hide();
+                $("#hangman4").show();
                 return false;
             } else if (num == 4) {
+                $("#hangman4").hide();
+                $("#hangman5").show();
                 return false;
             } else if (num == 5) {
+                $("#hangman5").hide();
+                $("#hangman6").show();
                 return false;
             } else if (num == 6) {
+                $("#hangman6").hide();
+                $("#hangman7").show();
                 return false;
-            } else {
-                return true;
+            } else if (num == 7) {
+                $("#hangman7").hide();
+                $("#hangman8").show();
             }
+            return true;
         }
 
         function guessAlphabel() {
@@ -143,11 +172,13 @@ NEW FEATURE COMING ::
                         // check correction alphabel
                         if (hangman.check(alphabel)) {
                             hangman.add(alphabel);
+                            // when input is wrong
                         } else {
                             // update num wrong
                             var num = parseInt($("#wrongGuess").text());
                             $("#wrongGuess").text(++num);
                             $("#listGuess").append("<li>\"" + $("#alphabel").val() + "\"</li>");
+                            hangman.checklose(num);
                         }
                     } else {
                         alert("Please, Don't Enter duplicate alphabel");
@@ -163,6 +194,9 @@ NEW FEATURE COMING ::
         var wordList = ["SCHOOL", "WORLD", "CHROME", "HANGMAN", "HOUSE", "STORE", "CALENDAR", "ENROLL", "DUPLICATE", "POISON", "REASON", "HAIRLINE", "DISEASE"];
 
         var random = parseInt(Math.random() * wordList.length);
+        // hint
+        console.log(wordList[random]);
+
         var hangman = new HangmanWord(wordList[random]);
         hangman.getHint();
 
@@ -171,7 +205,10 @@ NEW FEATURE COMING ::
                 if (event.keyCode == 13 && check) {
                     guessAlphabel();
                     hangman.getHint();
-                    hangman.checkWin()
+                    if (check) {
+                        hangman.checkWin();
+                    }
+
                 }
             });
 
@@ -179,11 +216,15 @@ NEW FEATURE COMING ::
             $("#guessButton").click(function() {
                 guessAlphabel();
                 hangman.getHint();
-                hangman.checkWin()
+                if (check) {
+                    hangman.checkWin();
+                }
             });
 
             $("#reset").click(function() {
                 random = parseInt(Math.random() * wordList.length);
+                // hint
+                console.log(wordList[random]);
                 // radom word again
                 hangman = new HangmanWord(wordList[random]);
                 hangman.getHint();
@@ -196,6 +237,8 @@ NEW FEATURE COMING ::
                 $("#listGuess").empty();
                 // reset check 
                 check = true;
+                // reset picture
+                hiddenPic();
             });
         });
 
